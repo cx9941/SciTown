@@ -2,6 +2,7 @@ from crewai import Agent, Crew, Process, Task
 from crewai.project import CrewBase, agent, crew, task, before_kickoff, after_kickoff
 from myllm.routers import ChatOpenRouter
 from ipdb import set_trace
+from source.custom_crew import Custom_Crew
 
 
 @CrewBase
@@ -75,13 +76,14 @@ class TestResearcher():
 
 
     @crew
-    def crew(self) -> Crew:
+    def crew(self) -> Custom_Crew:
         """Creates the TestResearcher crew"""
-        return Crew(
+        return Custom_Crew(
             agents=self.agents, 
             tasks=self.tasks, 
             # process=Process.sequential,
             verbose=True,
-            output_log_file="log.json"
+            output_log_file="log.json",
+            # _file_handler=FileHandler(self.output_log_file)
             # process=Process.hierarchical, # In case you wanna use that instead https://docs.crewai.com/how-to/Hierarchical/
         )
