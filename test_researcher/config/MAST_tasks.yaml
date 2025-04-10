@@ -1,0 +1,98 @@
+AI_export_answer_task:
+  description: > 
+    Leverage your expertise in the field to provide a comprehensive answer to the following question: {query} 
+    When answering, focus on incorporating insights and approaches from your specific field of expertise to enrich the response.
+  expected_output: > 
+    A concise, logically structured, and professionally informed response, not exceeding 500 words, tailored to the nuances of your area of expertise. 
+  agent: AI_export
+
+Microbiology_export_answer_task:
+  description: > 
+    Leverage your expertise in the field to provide a comprehensive answer to the following question: {query} 
+    When answering, focus on incorporating insights and approaches from your specific field of expertise to enrich the response.
+  expected_output: > 
+    A concise, logically structured, and professionally informed response, not exceeding 500 words, tailored to the nuances of your area of expertise. 
+  agent: Microbiology_export
+
+Integrative_researcher_summary_answer_task:
+  description: > 
+    Synthesize the responses from experts in different fields and provide an integrated summary report that 
+    reflects their diverse insights and perspectives on this question. The role is to act as a 
+    summarizing assistant, compiling expert input without adding new interpretations.
+  expected_output: > 
+    A comprehensive and coherent summary report that presents key viewpoints from multiple experts in a 
+    structured and neutral manner, highlighting areas of consensus and divergence. The report should serve as 
+    an executive-style summary and not exceed 800 words.
+  agent: Integrative_researcher
+  context:
+    - AI_export_answer_task
+    - Microbiology_export_answer_task
+
+# AI_export_reanswer_task:
+#   description: > 
+#     Leverage your expertise in the field to provide a comprehensive answer to the following question: {query} 
+#     When answering, draw primarily from your own domain knowledge, but where appropriate and with confidence, 
+#     incorporate relevant insights from the integrated summary of previous expert discussions to enrich and 
+#     contextualize your response.
+#   expected_output: > 
+#     A concise, logically structured, and professionally informed response, not exceeding 500 words, tailored to 
+#     the nuances of your area of expertise while optionally reflecting aligned insights from other fields.
+#   agent: AI_export
+#   context:
+#     - Integrative_researcher_summary_answer_task
+
+
+# Microbiology_export_reanswer_task:
+#   description: > 
+#     Leverage your expertise in the field to provide a comprehensive answer to the following question: {query} 
+#     When answering, draw primarily from your own domain knowledge, but where appropriate and with confidence, 
+#     incorporate relevant insights from the integrated summary of previous expert discussions to enrich and 
+#     contextualize your response.
+#   expected_output: > 
+#     A concise, logically structured, and professionally informed response, not exceeding 500 words, tailored to 
+#     the nuances of your area of expertise while optionally reflecting aligned insights from other fields.
+#   agent: Microbiology_export
+#   context:
+#     - Integrative_researcher_summary_answer_task
+
+AI_export_reanswer_task:
+  description: > 
+    Leverage your deep expertise in AI to deliver a comprehensive, well-reasoned response to the following question: {query}. 
+    Rather than merely contrasting domain methods or superficially combining perspectives, your response should embody a deeply integrated approach. 
+    Seamlessly synthesize AI insights with relevant knowledge distilled from prior interdisciplinary expert discussions to uncover novel 
+    interpretations, resolve ambiguities, or enrich the explanatory depth.
+  expected_output: > 
+    A concise, logically coherent, and professionally rigorous response—ideally under 500 words—that reflects expert-level understanding in 
+    AI while thoughtfully weaving in relevant, context-sensitive insights from other fields to form a unified perspective.
+  agent: AI_export
+  context:
+    - Integrative_researcher_summary_answer_task
+
+
+Microbiology_export_reanswer_task:
+  description: > 
+    Leverage your deep expertise in microbiology to deliver a comprehensive, well-reasoned response to the following question: {query}. 
+    Rather than merely contrasting domain methods or superficially combining perspectives, your response should embody a deeply integrated approach. 
+    Seamlessly synthesize microbiological insights with relevant knowledge distilled from prior interdisciplinary expert discussions to uncover novel 
+    interpretations, resolve ambiguities, or enrich the explanatory depth.
+  expected_output: > 
+    A concise, logically coherent, and professionally rigorous response—ideally under 500 words—that reflects expert-level understanding in 
+    microbiology while thoughtfully weaving in relevant, context-sensitive insights from other fields to form a unified perspective.
+  agent: Microbiology_export
+  context:
+    - Integrative_researcher_summary_answer_task
+
+
+# Integrative_researcher_summary_final_task:
+#   description: > 
+#     Synthesize the responses from experts in different fields and provide an integrated summary report that 
+#     reflects their diverse insights and perspectives on this question. The role is to act as a 
+#     summarizing assistant, compiling expert input without adding new interpretations.
+#   expected_output: > 
+#     A comprehensive and coherent summary report that presents key viewpoints from multiple experts in a 
+#     structured and neutral manner, highlighting areas of consensus and divergence. The report should serve as 
+#     an executive-style summary and not exceed 800 words.
+#   agent: Integrative_researcher
+#   context:
+#     - AI_export_reanswer_task
+#     - Microbiology_export_reanswer_task

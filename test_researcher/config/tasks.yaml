@@ -1,0 +1,104 @@
+# research_task:
+#   description: >
+#     Conduct a thorough research about {topic}
+#     Make sure you find any interesting and relevant information given
+#     the current year is {current_year}.
+#   expected_output: >
+#     A list with 10 bullet points of the most relevant information about {topic}
+#   agent: researcher
+
+# reporting_task:
+#   description: >
+#     Review the context you got and expand each topic into a full section for a report.
+#     Make sure the report is detailed and contains any and all relevant information.
+#   expected_output: >
+#     A fully fledged report with the main topics, each with a full section of information.
+#     Formatted as markdown without '```'
+#   agent: reporting_analyst
+
+
+radiological_professor_answer_task:
+  description: > 
+    Leverage your expertise in the field to provide a comprehensive answer to the following question: {query} 
+  expected_output: > 
+    A concise, logically structured, and professionally informed response, not exceeding 500 words. 
+  agent: radiological_professor
+  async_execution: True
+
+immunology_professor_answer_task:
+  description: > 
+    Leverage your expertise in the field to provide a comprehensive answer to the following question: {query} 
+  expected_output: > 
+    A concise, logically structured, and professionally informed response, not exceeding 500 words. 
+  agent: immunology_professor
+  async_execution: True
+
+genomics_professor_answer_task:
+  description: > 
+    Leverage your expertise in the field to provide a comprehensive answer to the following question: {query} 
+  expected_output: > 
+    A concise, logically structured, and professionally informed response, not exceeding 500 words. 
+  agent: genomics_professor
+  async_execution: True
+
+biomedical_informatics_professor_answer_task:
+  description: > 
+    Leverage your expertise in the field to provide a comprehensive answer to the following question: {query} 
+  expected_output: > 
+    A concise, logically structured, and professionally informed response, not exceeding 500 words. 
+  agent: biomedical_informatics_professor
+  async_execution: True
+
+regenerative_medicine_professor_answer_task:
+  description: > 
+    Leverage your expertise in the field to provide a comprehensive answer to the following question: {query} 
+  expected_output: > 
+    A concise, logically structured, and professionally informed response, not exceeding 500 words. 
+  agent: regenerative_medicine_professor
+  async_execution: True
+
+clinical_medicine_professor_answer_task:
+  description: > 
+    Leverage your expertise in the field to provide a comprehensive answer to the following question: {query} 
+  expected_output: > 
+    A concise, logically structured, and professionally informed response, not exceeding 500 words. 
+  agent: clinical_medicine_professor
+  async_execution: True
+
+drug_discovery_professor_answer_task:
+  description: > 
+    Leverage your expertise in the field to provide a comprehensive answer to the following question: {query} 
+  expected_output: > 
+    A concise, logically structured, and professionally informed response, not exceeding 500 words. 
+  agent: drug_discovery_professor
+  async_execution: True
+
+integrative_researcher_summary_answer_task:
+  description: > 
+    Synthesize the results from experts in different fields to provide an integrated conclusion that draws from 
+    their diverse insights and perspectives on this question: {query}.
+  expected_output: > 
+    A comprehensive, coherent summary that combines expert insights from multiple fields, providing a unified 
+    conclusion, not exceeding 800 words.
+  agent: integrative_researcher
+  context:
+    - radiological_professor_answer_task
+    - immunology_professor_answer_task
+    - genomics_professor_answer_task
+    - biomedical_informatics_professor_answer_task
+    - regenerative_medicine_professor_answer_task
+    - clinical_medicine_professor_answer_task
+    - drug_discovery_professor_answer_task
+
+medical_ethics_professor_check_answer_task:
+  description: > 
+    Review the given answer to the question: {query}, ensuring it complies with medical ethics standards. If any part 
+    of the response presents potential medical ethics risks, include a "[Ethics Alert]" warning at the relevant section. 
+  expected_output: > 
+    A detailed review of the provided answer, highlighting any ethical concerns. If the answer is ethically sound, confirm 
+    it is risk-free. If risks are detected, add an "[Ethics Alert]" at the corresponding part of the response. 
+  agent: medical_ethics_professor
+  context:
+    - integrative_researcher_summary_answer_task
+
+  
