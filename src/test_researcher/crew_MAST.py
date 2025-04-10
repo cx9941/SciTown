@@ -13,7 +13,7 @@ class TestResearcher():
     def AI_export(self) -> Agent:
         return Agent(
             config=self.agents_config['AI_export'],
-            llm=ChatOpenRouter(model_name="openrouter/deepseek/deepseek-chat-v3-0324", temperature=0.4),
+            llm=ChatOpenRouter(model_name="openrouter/meta-llama/llama-3.2-1b-instruct:free", temperature=0.4),
             verbose=True
         )
     
@@ -21,7 +21,7 @@ class TestResearcher():
     def Microbiology_export(self) -> Agent:
         return Agent(
             config=self.agents_config['Microbiology_export'],
-            llm=ChatOpenRouter(model_name="openrouter/deepseek/deepseek-chat-v3-0324", temperature=0.4),
+            llm=ChatOpenRouter(model_name="openrouter/meta-llama/llama-3.2-1b-instruct:free", temperature=0.4),
             verbose=True
         )
     
@@ -29,7 +29,7 @@ class TestResearcher():
     def Integrative_researcher(self) -> Agent:
         return Agent(
             config=self.agents_config['Integrative_researcher'],
-            llm=ChatOpenRouter(model_name="openrouter/deepseek/deepseek-chat-v3-0324", temperature=0.4),
+            llm=ChatOpenRouter(model_name="openrouter/meta-llama/llama-3.2-1b-instruct:free", temperature=0.4),
             verbose=True
         )
     
@@ -37,7 +37,7 @@ class TestResearcher():
     def AI_export_answer_task(self) -> Task:
         return Task(
             config=self.tasks_config['AI_export_answer_task'],
-            llm=ChatOpenRouter(model_name="openrouter/deepseek/deepseek-chat-v3-0324", temperature=0.4),
+            llm=ChatOpenRouter(model_name="openrouter/meta-llama/llama-3.2-1b-instruct:free", temperature=0.4),
             verbose=True
         )
     
@@ -45,7 +45,7 @@ class TestResearcher():
     def Microbiology_export_answer_task(self) -> Task:
         return Task(
             config=self.tasks_config['Microbiology_export_answer_task'],
-            llm=ChatOpenRouter(model_name="openrouter/deepseek/deepseek-chat-v3-0324", temperature=0.4),
+            llm=ChatOpenRouter(model_name="openrouter/meta-llama/llama-3.2-1b-instruct:free", temperature=0.4),
             verbose=True
         )
     
@@ -53,7 +53,7 @@ class TestResearcher():
     def Integrative_researcher_summary_answer_task(self) -> Task:
         return Task(
             config=self.tasks_config['Integrative_researcher_summary_answer_task'],
-            llm=ChatOpenRouter(model_name="openrouter/deepseek/deepseek-chat-v3-0324", temperature=0.4),
+            llm=ChatOpenRouter(model_name="openrouter/meta-llama/llama-3.2-1b-instruct:free", temperature=0.4),
             verbose=True
         )
 
@@ -61,7 +61,7 @@ class TestResearcher():
     def AI_export_reanswer_task(self) -> Task:
         return Task(
             config=self.tasks_config['AI_export_reanswer_task'],
-            llm=ChatOpenRouter(model_name="openrouter/deepseek/deepseek-chat-v3-0324", temperature=0.4),
+            llm=ChatOpenRouter(model_name="openrouter/meta-llama/llama-3.2-1b-instruct:free", temperature=0.4),
             verbose=True
         )
     
@@ -69,7 +69,7 @@ class TestResearcher():
     def Microbiology_export_reanswer_task(self) -> Task:
         return Task(
             config=self.tasks_config['Microbiology_export_reanswer_task'],
-            llm=ChatOpenRouter(model_name="openrouter/deepseek/deepseek-chat-v3-0324", temperature=0.4),
+            llm=ChatOpenRouter(model_name="openrouter/meta-llama/llama-3.2-1b-instruct:free", temperature=0.4),
             verbose=True
         )
 
