@@ -1,4 +1,5 @@
 from langchain_openai import ChatOpenAI
+import os
 
 class ChatLocalVLLM(ChatOpenAI):
     def __init__(
@@ -7,6 +8,7 @@ class ChatLocalVLLM(ChatOpenAI):
         openai_api_base: str = "https://uni-api.cstcloud.cn/v1",  # 正确的 vllm 原生接口
         **kwargs
     ):
+        openai_api_key = os.getenv("OPEN_API_KEY")
         super().__init__(
             model_name=model_name,
             openai_api_base=openai_api_base,
