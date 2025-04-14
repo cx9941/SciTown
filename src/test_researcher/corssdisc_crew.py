@@ -26,8 +26,8 @@ executor_llm = ChatOpenAI(model="openai/llama8b")
 
 @CrewBase
 class TestResearcher():
-    agents_config = 'config/new_agents.yaml'
-    tasks_config = 'config/new_tasks.yaml'
+    agents_config = 'config/crossdisc/agents.yaml'
+    tasks_config = 'config/crossdisc/tasks.yaml'
 
     @agent
     def Biology_export(self) -> Agent:
@@ -119,7 +119,7 @@ class TestResearcher():
             # planning_llm=planning_llm,
             # planning=True,
             verbose=True,
-            output_log_file="../outputs/new-log.json",
+            output_log_file="../outputs/corssdisc/log.json",
             # _file_handler=FileHandler(self.output_log_file)
             process=Process.hierarchical, # In case you wanna use that instead https://docs.crewai.com/how-to/Hierarchical/
         )

@@ -5,7 +5,7 @@ import warnings
 from datetime import datetime
 
 # from test_researcher.crew import TestResearcher
-from test_researcher.crew_MAST import TestResearcher
+from test_researcher.corssdisc_crew import TestResearcher
 
 warnings.filterwarnings("ignore", category=SyntaxWarning, module="pysbd")
 
