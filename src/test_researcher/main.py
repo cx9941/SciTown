@@ -19,7 +19,8 @@ def run():
     Run the crew.
     """
     inputs = {
-        "query": "如何获得深海微生物的纯培养"
+        "query": "如何获得深海微生物的纯培养",
+        "main_agent": "Biology_export"
     }
     
     try:

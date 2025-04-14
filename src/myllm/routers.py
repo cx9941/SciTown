@@ -1,6 +1,7 @@
 from pydantic import BaseModel, ConfigDict, Field, SecretStr, model_validator
 from langchain_openai import ChatOpenAI
 import os
+from langserve import RemoteRunnable
 
 class ChatOpenRouter(ChatOpenAI):
     openai_api_base: str

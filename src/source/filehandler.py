@@ -1,6 +1,5 @@
 import json
 import os
-import pickle
 from datetime import datetime
 from typing import Union
 
@@ -57,51 +56,3 @@ class FileHandler:
 
         except Exception as e:
             raise ValueError(f"Failed to log message: {str(e)}")
-        
-class PickleHandler:
-    def __init__(self, file_name: str) -> None:
-        """
-        Initialize the PickleHandler with the name of the file where data will be stored.
-        The file will be saved in the current directory.
-
-        Parameters:
-        - file_name (str): The name of the file for saving and loading data.
-        """
-        if not file_name.endswith(".pkl"):
-            file_name += ".pkl"
-
-        self.file_path = os.path.join(os.getcwd(), file_name)
-
-    def initialize_file(self) -> None:
-        """
-        Initialize the file with an empty dictionary and overwrite any existing data.
-        """
-        self.save({})
-
-    def save(self, data) -> None:
-        """
-        Save the data to the specified file using pickle.
-
-        Parameters:
-        - data (object): The data to be saved.
-        """
-        with open(self.file_path, "wb") as file:
-            pickle.dump(data, file)
-
-    def load(self) -> dict:
-        """
-        Load the data from the specified file using pickle.
-
-        Returns:
-        - dict: The data loaded from the file.
-        """
-        if not os.path.exists(self.file_path) or os.path.getsize(self.file_path) == 0:
-            return {}  # Return an empty dictionary if the file does not exist or is empty
-
-        with open(self.file_path, "rb") as file:
-            try:
-                return pickle.load(file)  # nosec
-            except EOFError:
-                return {}  # Return an empty dictionary if the file is empty or corrupted
-            except Exception:
-                raise  # Raise any other exceptions that occur during loading
