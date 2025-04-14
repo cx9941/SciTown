@@ -16,10 +16,12 @@ import os
 from langchain_openai import ChatOpenAI
 
 os.environ["OPENAI_API_BASE"] = "http://10.0.82.212:8865/v1"
-os.environ["OPENAI_API_KEY"] = "NA"
-
 manager_llm = ChatOpenAI(model="openai/llama8b")
 executor_llm = ChatOpenAI(model="openai/llama8b")
+
+# os.environ["OPENAI_API_BASE"] = "https://uni-api.cstcloud.cn/v1"
+# manager_llm = ChatOpenAI(model="openai/deepseek-v3:671b")
+# executor_llm = ChatOpenAI(model="openai/deepseek-v3:671b")
 
 # executor_llm = ChatOpenRouter(model_name="openrouter/nvidia/llama-3.1-nemotron-70b-instruct:free", temperature=0.4)
 # manager_llm = ChatOpenRouter(model_name="openrouter/nvidia/llama-3.1-nemotron-70b-instruct:free", temperature=0.4)
@@ -77,34 +79,42 @@ class TestResearcher():
             verbose=True
         )
     
-    @agent
-    def Integrative_researcher(self) -> Agent:
-        return Agent(
-            config=self.agents_config['Integrative_researcher'],
-            llm=executor_llm,
-            verbose=True
-        )
-    
     @task
-    def Step1_Main_Expert_Response(self) -> Task:
+    def Decompose_Problem_Into_Subtasks(self) -> Task:
         return Task(
-            config=self.tasks_config['Step1_Main_Expert_Response'],
+            config=self.tasks_config['Decompose_Problem_Into_Subtasks'],
             llm=manager_llm,
             verbose=True
         )
     
     @task
-    def Step2_Cross_Domain_Support(self) -> Task:
+    def Subtask_MultiDomain_Expert_Analysis(self) -> Task:
         return Task(
-            config=self.tasks_config['Step2_Cross_Domain_Support'],
+            config=self.tasks_config['Subtask_MultiDomain_Expert_Analysis'],
             llm=executor_llm,
             verbose=True
         )
     
     @task
-    def Step3_Integrated_Summary_Response(self) -> Task:
+    def CrossDomain_Support_Expansion(self) -> Task:
         return Task(
-            config=self.tasks_config['Step3_Integrated_Summary_Response'],
+            config=self.tasks_config['CrossDomain_Support_Expansion'],
+            llm=executor_llm,
+            verbose=True
+        )
+    
+    @task
+    def Subtask_Integrated_Summary(self) -> Task:
+        return Task(
+            config=self.tasks_config['Subtask_Integrated_Summary'],
+            llm=executor_llm,
+            verbose=True
+        )
+    
+    @task
+    def Final_Solution_Proposal(self) -> Task:
+        return Task(
+            config=self.tasks_config['Final_Solution_Proposal'],
             llm=executor_llm,
             verbose=True
         )
@@ -119,7 +129,7 @@ class TestResearcher():
             # planning_llm=planning_llm,
             # planning=True,
             verbose=True,
-            output_log_file="../outputs/corssdisc/log.json",
+            output_log_file="../outputs/crossdisc/log.json",
             # _file_handler=FileHandler(self.output_log_file)
             process=Process.hierarchical, # In case you wanna use that instead https://docs.crewai.com/how-to/Hierarchical/
         )

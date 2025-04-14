@@ -1,0 +1,27 @@
+Step1_Main_Expert_Response:
+  description: >
+    你是该问题的主要领域专家，请基于你所在学科的专业知识，全面分析并回答以下问题：{query}。
+    回答应体现你专业的理论基础、分析方法和领域洞察，并尽量具体、具备逻辑性。
+  expected_output: >
+    一份围绕该问题的完整回答（不超过500字），需具备逻辑严密、概念清晰、术语专业的特征。
+  agent: Biology_export
+
+Step2_Cross_Domain_Support:
+  description: >
+    请你基于主学科专家的回答，额外选择一位另外一位学科专家，结合你所在的相关交叉学科视角，对以下问题进行补充分析：{query}。
+    你的任务是补充新的角度、揭示主学科未充分展开的机制，或引出跨学科影响。
+  expected_output: >
+    一份基于交叉学科角度的补充性回答（不超过400字），强调跨学科洞察与联系点。
+  context:
+    - Step1_Main_Expert_Response
+
+Step3_Integrated_Summary_Response:
+  description: >
+    你是跨学科科学讨论的协调专家，请综合以下专家的回答，给出结构化总结，并凝练关键共识与差异，形成统一结论：{query}。
+    你不需要引入新的观点，仅基于已有回答进行分析、重构与总结。
+  expected_output: >
+    一份结构清晰、要点突出的综合性总结，不超过800字，可包括“主学科视角”、“交叉学科补充”与“统一解读”等小节。
+  agent: Integrative_researcher
+  context:
+    - Step1_Main_Expert_Response
+    - Step2_Cross_Domain_Support

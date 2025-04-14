@@ -4,8 +4,8 @@ import warnings
 
 from datetime import datetime
 
-# from test_researcher.crew import TestResearcher
-from test_researcher.corssdisc_crew import TestResearcher
+from test_researcher.crossdisc_crew import TestResearcher
+
 
 warnings.filterwarnings("ignore", category=SyntaxWarning, module="pysbd")
 
@@ -19,8 +19,7 @@ def run():
     Run the crew.
     """
     inputs = {
-        "query": "如何获得深海微生物的纯培养",
-        "main_agent": "Biology_export"
+        "query": "水下大模型环境研究"
     }
     
     try:
