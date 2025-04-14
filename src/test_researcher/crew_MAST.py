@@ -119,7 +119,7 @@ class TestResearcher():
             # planning_llm=planning_llm,
             # planning=True,
             verbose=True,
-            output_log_file="new-log.json",
+            output_log_file="../outputs/new-log.json",
             # _file_handler=FileHandler(self.output_log_file)
             process=Process.hierarchical, # In case you wanna use that instead https://docs.crewai.com/how-to/Hierarchical/
         )
