@@ -1,1 +1,4 @@
 crewai
+langchain_openai
+langserve
+ipdb
