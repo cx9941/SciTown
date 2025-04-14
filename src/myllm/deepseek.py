@@ -5,7 +5,6 @@ class ChatLocalVLLM(ChatOpenAI):
         self,
         model_name: str = "deepseek-v3:671b",
         openai_api_base: str = "https://uni-api.cstcloud.cn/v1",  # 正确的 vllm 原生接口
-        openai_api_key: str = "6c5c96209c4ef126a87fbe9840fab7c346b4c6fb6a57529fce7dea01c683fd1b",  # vllm 不校验 key
         **kwargs
     ):
         super().__init__(
