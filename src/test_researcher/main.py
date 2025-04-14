@@ -19,7 +19,7 @@ def run():
     Run the crew.
     """
     inputs = {
-        "query": "水下大模型环境研究"
+        "query": "深海探测方法研究"
     }
     
     try:
