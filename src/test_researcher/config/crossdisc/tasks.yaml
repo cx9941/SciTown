@@ -1,22 +1,23 @@
 # Step 1: 子任务拆解（协调专家）
 Decompose_Problem_Into_Subtasks:
   description: >
-    请你根据用户提出的问题：{query}，将其拆解为3-5个子问题或关键研究维度。
-    每个子问题应明确、具体，并适合由不同学科专家进行深入分析。
+    请委派一位学科专家，根据用户提出的问题：{query}，提炼出其中核心的3-5个子问题并提出针对性的解决方案。
+    每个子问题应明确、具体，并适合由不同学科专家进行深入分析，子问题之间具备关联性，总共构成解决整个大问题的基础。
+    每个方案也应该明确、具体，能够体现学科专业性，例如新一代脑启发的人工智能模型与有效训练算法。
   expected_output: >
-    一份结构化列表，内容为子问题编号 + 子问题简要描述（每条不超过100字）。
+    针对某一子任务的主学科视角分析，一份结构化列表，内容为子问题编号 + 子问题 + 解决方案描述，由单个学科专家分析。
   # agent: Biology_export
 
 # Step 2: 主学科专家分析（支持多个执行，每个由 manager_llm 指派）
 Subtask_MultiDomain_Expert_Analysis:
   description: >
-    请你基于你所在学科的专业知识，选择一个与你高度相关的子问题，进行全面深入的分析。
-    回答应体现你专业的理论基础、分析方法和领域洞察，并尽量具体、具备逻辑性。
+    请你基于你所在学科的专业知识，选择一个与你高度相关的子问题，进行全面深入的分析和解决。
+    给出的解决方案应足够专业，尽量具体、具备逻辑性。
     当前主问题为：{query}
   context:
     - Decompose_Problem_Into_Subtasks
   expected_output: >
-    针对某一子任务的主学科视角分析（不超过500字），可在整个子任务分析阶段多轮调用、由多个学科参与。
+    针对某一子任务的交叉学科视角分析，可在整个子任务分析阶段多轮调用、由多个学科参与。
   # 由 manager 决定 agent，允许多轮并行执行
 
 # Step 3: 跨学科补充（支持多个执行，每个由 manager 指派非主学科专家）
@@ -28,27 +29,15 @@ CrossDomain_Support_Expansion:
   context:
     - Subtask_MultiDomain_Expert_Analysis
   expected_output: >
-    一份基于非主学科的补充性分析（不超过400字），鼓励提供新的变量、机制、模型或可落地路径。
+    一份基于非主学科的补充性分析，鼓励提供新的变量、机制、模型或可落地路径。
   # 同样不指定 agent，由 manager 灵活调度，支持多轮补充
 
-# Step 4: 子任务整合总结（由协调专家完成）
-Subtask_Integrated_Summary:
-  description: >
-    请你对该子任务的所有主学科分析与交叉补充进行归纳，提炼主要结论、交叉学科价值及潜在分歧。
-    当前主问题为：{query}
-  context:
-    - Subtask_MultiDomain_Expert_Analysis
-    - CrossDomain_Support_Expansion
-  expected_output: >
-    一份结构化小结，建议包含“主学科视角概述”、“交叉补充亮点”、“统一结论或争议点”三部分，总长度不超过600字。
-
-
-# Step 5: 最终解决方案整合（由协调专家完成）
+# Step 4: 最终解决方案整合（由协调专家完成）
 Final_Solution_Proposal:
   description: >
-    请你整合所有子任务的小结与分析结果，构建一个系统性的、具备操作性的科学解决方案，包括研究路径、关键机制及建议。
+    请你整合所有子任务的小结与分析结果，构建一个系统性的、具备操作性的科学解决方案，最终撰写一份项目申请书。
     当前主问题为：{query}
   context:
-    - Subtask_Integrated_Summary
+    - CrossDomain_Support_Expansion
   expected_output: >
-    一份结构化方案文档，包括“问题综述”、“核心子问题摘要”、“跨学科共识”、“综合解决路径与未来建议”四部分，不超过800字。
+    一份结构化方案文档，类似项目申请书的格式，包括“摘要”、“研究背景和意义”、“研究内容”、 “拟解决的科学问题”、 “拟提出的技术路线”、“预期成果”。

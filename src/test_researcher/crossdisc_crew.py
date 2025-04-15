@@ -14,14 +14,19 @@ from crewai.utilities.llm_utils import create_llm
 from crewai.llm import LLM, BaseLLM
 import os
 from langchain_openai import ChatOpenAI
+import os
 
-os.environ["OPENAI_API_BASE"] = "http://10.0.82.212:8865/v1"
-manager_llm = ChatOpenAI(model="openai/llama8b")
-executor_llm = ChatOpenAI(model="openai/llama8b")
 
-# os.environ["OPENAI_API_BASE"] = "https://uni-api.cstcloud.cn/v1"
-# manager_llm = ChatOpenAI(model="openai/deepseek-v3:671b")
-# executor_llm = ChatOpenAI(model="openai/deepseek-v3:671b")
+# os.environ["OPENAI_API_BASE"] = "http://localhost:8001/v1"
+# os.environ["OPENAI_API_KEY"] = "NA"
+
+# manager_llm = ChatOpenAI(model="openai/qwen72b")
+# executor_llm = ChatOpenAI(model="openai/qwen72b")
+
+os.environ["OPENAI_API_BASE"] = "https://uni-api.cstcloud.cn/v1"
+
+manager_llm = ChatOpenAI(model="openai/deepseek-v3:671b")
+executor_llm = ChatOpenAI(model="openai/deepseek-v3:671b")
 
 # executor_llm = ChatOpenRouter(model_name="openrouter/nvidia/llama-3.1-nemotron-70b-instruct:free", temperature=0.4)
 # manager_llm = ChatOpenRouter(model_name="openrouter/nvidia/llama-3.1-nemotron-70b-instruct:free", temperature=0.4)
@@ -104,14 +109,6 @@ class TestResearcher():
         )
     
     @task
-    def Subtask_Integrated_Summary(self) -> Task:
-        return Task(
-            config=self.tasks_config['Subtask_Integrated_Summary'],
-            llm=executor_llm,
-            verbose=True
-        )
-    
-    @task
     def Final_Solution_Proposal(self) -> Task:
         return Task(
             config=self.tasks_config['Final_Solution_Proposal'],
@@ -129,7 +126,7 @@ class TestResearcher():
             # planning_llm=planning_llm,
             # planning=True,
             verbose=True,
-            output_log_file="../outputs/crossdisc/log.json",
+            output_log_file="../outputs/crossdisc/log-deep.json",
             # _file_handler=FileHandler(self.output_log_file)
             process=Process.hierarchical, # In case you wanna use that instead https://docs.crewai.com/how-to/Hierarchical/
         )
