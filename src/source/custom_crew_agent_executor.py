@@ -36,8 +36,67 @@ from crewai.utilities.training_handler import CrewTrainingHandler
 
 from crewai.agents.crew_agent_executor import CrewAgentExecutor
 
+from .agent_utils import show_agent_logs_json
+
 class Custom_CrewAgentExecutor(CrewAgentExecutor):
     _logger: Logger = Logger()
+
+    def __init__(
+        self,
+        llm: Any,
+        task: Any,
+        crew: Any,
+        agent: BaseAgent,
+        prompt: dict[str, str],
+        max_iter: int,
+        tools: List[CrewStructuredTool],
+        tools_names: str,
+        stop_words: List[str],
+        tools_description: str,
+        tools_handler: ToolsHandler,
+        step_callback: Any = None,
+        original_tools: List[Any] = [],
+        function_calling_llm: Any = None,
+        respect_context_window: bool = False,
+        request_within_rpm_limit: Optional[Callable[[], bool]] = None,
+        callbacks: List[Any] = [],
+        **kwargs,
+    ):
+        self._i18n: I18N = I18N()
+        self.llm: BaseLLM = llm
+        self.task = task
+        self.agent = agent
+        self.crew = crew
+        self.prompt = prompt
+        self.tools = tools
+        self.tools_names = tools_names
+        self.stop = stop_words
+        self.max_iter = max_iter
+        self.callbacks = callbacks
+        self._printer: Printer = Printer()
+        self.tools_handler = tools_handler
+        self.original_tools = original_tools
+        self.step_callback = step_callback
+        self.use_stop_words = self.llm.supports_stop_words()
+        self.tools_description = tools_description
+        self.function_calling_llm = function_calling_llm
+        self.respect_context_window = respect_context_window
+        self.request_within_rpm_limit = request_within_rpm_limit
+        self.ask_for_human_input = False
+        self.messages: List[Dict[str, str]] = []
+        self.iterations = 0
+        self.log_error_after = 3
+        self.tool_name_to_tool_map: Dict[str, Union[CrewStructuredTool, BaseTool]] = {
+            tool.name: tool for tool in self.tools
+        }
+        existing_stop = self.llm.stop or []
+        self.llm.stop = list(
+            set(
+                existing_stop + self.stop
+                if isinstance(existing_stop, list)
+                else self.stop
+            )
+        )
 
     def _invoke_loop(self) -> AgentFinish:
         """
@@ -136,3 +195,25 @@ class Custom_CrewAgentExecutor(CrewAgentExecutor):
         assert isinstance(formatted_answer, AgentFinish)
         self._show_logs(formatted_answer)
         return formatted_answer
+
+    def _show_logs(self, formatted_answer: Union[AgentAction, AgentFinish]):
+        """Show logs for the agent's execution."""
+        if self.agent is None:
+            raise ValueError("Agent cannot be None")
+        
+        show_agent_logs(
+            printer=self._printer,
+            agent_role=self.agent.role,
+            formatted_answer=formatted_answer,
+            verbose=self.agent.verbose
+            or (hasattr(self, "crew") and getattr(self.crew, "verbose", False)),
+        )
+
+        show_agent_logs_json(
+            path=self.agent.task_execution_output_json_path,
+            printer=self._printer,
+            agent_role=self.agent.role,
+            formatted_answer=formatted_answer,
+            verbose=self.agent.verbose
+            or (hasattr(self, "crew") and getattr(self.crew, "verbose", False)),
+        )

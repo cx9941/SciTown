@@ -18,6 +18,7 @@ import os
 from langchain_openai import ChatOpenAI
 import os
 from .init_args import args
+import json
 
 if args.model_name == 'qwen':
     os.environ["OPENAI_API_BASE"] = "http://localhost:8001/v1"

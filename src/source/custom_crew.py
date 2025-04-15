@@ -20,8 +20,30 @@ from crewai.tools.agent_tools.agent_tools import AgentTools
 
 from .custom_task import Custom_Task
 from .custom_agent import Custom_Agent
+from pydantic import PrivateAttr
 
 class Custom_Crew(Crew):
+
+    # @model_validator(mode="after")
+    # def check_config(self):
+    #     """Validates that the crew is properly configured with agents and tasks."""
+    #     if not self.config and not self.tasks and not self.agents:
+    #         raise PydanticCustomError(
+    #             "missing_keys",
+    #             "Either 'agents' and 'tasks' need to be set or 'config'.",
+    #             {},
+    #         )
+
+    #     if self.config:
+    #         self._setup_from_config()
+
+    #     if self.agents:
+    #         for agent in self.agents:
+    #             if self.cache:
+    #                 agent.set_cache_handler(self._cache_handler)
+    #             if self.max_rpm:
+    #                 agent.set_rpm_controller(self._rpm_controller)
+    #     return self
 
     @model_validator(mode="after")
     def set_private_attrs(self) -> "Crew":
@@ -51,6 +73,10 @@ class Custom_Crew(Crew):
 
         self.process = self.config.get("process", self.process)
         self.agents = [Custom_Agent(**agent) for agent in self.config["agents"]]
+        
+        # for i in self.agents:
+        #     i.task_execution_output_json_path = self.task_execution_output_json_path
+
         self.tasks = [self._create_task(task) for task in self.config["tasks"]]
 
     def _create_manager_agent(self):
