@@ -58,6 +58,7 @@ class Custom_Agent(Agent):
             self.tools_handler.last_used_tool = {}  # type: ignore # Incompatible types in assignment (expression has type "dict[Never, Never]", variable has type "ToolCalling")
 
         task_prompt = task.prompt()
+        task_name = task.name
 
         # If the task requires output in JSON or Pydantic format,
         # append specific instructions to the task prompt to ensure
@@ -132,6 +133,7 @@ class Custom_Agent(Agent):
             result = self.agent_executor.invoke(
                 {
                     "input": task_prompt,
+                    "task_name": task_name,
                     "tool_names": self.agent_executor.tools_names,
                     "tools": self.agent_executor.tools_description,
                     "ask_for_human_input": task.human_input,

@@ -35,8 +35,8 @@ from crewai.utilities.tool_utils import execute_tool_and_check_finality
 from crewai.utilities.training_handler import CrewTrainingHandler
 
 from crewai.agents.crew_agent_executor import CrewAgentExecutor
-
-from .agent_utils import show_agent_logs_json
+from datetime import datetime
+import os
 
 class Custom_CrewAgentExecutor(CrewAgentExecutor):
     _logger: Logger = Logger()
@@ -97,6 +97,48 @@ class Custom_CrewAgentExecutor(CrewAgentExecutor):
                 else self.stop
             )
         )
+        self.task_name = self.task.name if self.task is not None else None
+        
+
+
+    def invoke(self, inputs: Dict[str, str]) -> Dict[str, Any]:
+        if "system" in self.prompt:
+            system_prompt = self._format_prompt(self.prompt.get("system", ""), inputs)
+            user_prompt = self._format_prompt(self.prompt.get("user", ""), inputs)
+            self.messages.append(format_message_for_llm(system_prompt, role="system"))
+            self.messages.append(format_message_for_llm(user_prompt))
+        else:
+            user_prompt = self._format_prompt(self.prompt.get("prompt", ""), inputs)
+            self.messages.append(format_message_for_llm(user_prompt))
+
+        self._show_start_logs()
+        # self.task.name = inputs["task_name"] if self.task.name is None else self.task.name
+
+        self.ask_for_human_input = bool(inputs.get("ask_for_human_input", False))
+
+        try:
+            formatted_answer = self._invoke_loop()
+        except AssertionError:
+            self._printer.print(
+                content="Agent failed to reach a final answer. This is likely a bug - please report it.",
+                color="red",
+            )
+            raise
+        except Exception as e:
+            handle_unknown_error(self._printer, e)
+            if e.__class__.__module__.startswith("litellm"):
+                # Do not retry on litellm errors
+                raise e
+            else:
+                raise e
+
+        if self.ask_for_human_input:
+            formatted_answer = self._handle_human_feedback(formatted_answer)
+
+        self._create_short_term_memory(formatted_answer)
+        self._create_long_term_memory(formatted_answer)
+        self._create_external_memory(formatted_answer)
+        return {"output": formatted_answer.output}
 
     def _invoke_loop(self) -> AgentFinish:
         """
@@ -209,11 +251,26 @@ class Custom_CrewAgentExecutor(CrewAgentExecutor):
             or (hasattr(self, "crew") and getattr(self.crew, "verbose", False)),
         )
 
-        show_agent_logs_json(
-            path=self.agent.task_execution_output_json_path,
-            printer=self._printer,
-            agent_role=self.agent.role,
-            formatted_answer=formatted_answer,
-            verbose=self.agent.verbose
-            or (hasattr(self, "crew") and getattr(self.crew, "verbose", False)),
-        )
+        self.show_agent_logs_json(formatted_answer)
+
+    def show_agent_logs_json(self, formatted_answer):
+
+        if os.path.exists(self.crew.task_execution_output_json_path):
+            results = json.load(open(self.crew.task_execution_output_json_path, 'r'))
+        else:
+            results = []
+
+        ans = {
+            "task_name": self.task_name,
+            "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            "task": self.task.description,
+            "task_key": self.task.key,
+            "agent": self.agent.role,
+            "expected_output": self.task.expected_output,
+            "answer": getattr(formatted_answer, 'output', None),  # 如果没有 .output，就为 None
+            "messages": self.messages,
+        }
+
+        results += [ans]
+
+        json.dump(results, open(self.crew.task_execution_output_json_path, 'w'), ensure_ascii=False, indent=4)

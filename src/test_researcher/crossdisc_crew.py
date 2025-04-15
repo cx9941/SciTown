@@ -19,6 +19,16 @@ from langchain_openai import ChatOpenAI
 import os
 from .init_args import args
 import json
+from datetime import datetime
+
+timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+
+output_log_file = f"{args.log_dir}/{args.query}/{timestamp}.json"
+task_execution_output_json_path = f"{args.execution_logs_dir}/{args.query}/{timestamp}.json"
+
+os.makedirs(f"{args.log_dir}/{args.query}", exist_ok=True)
+os.makedirs(f"{args.execution_logs_dir}/{args.query}", exist_ok=True)
+
 
 if args.model_name == 'qwen':
     os.environ["OPENAI_API_BASE"] = "http://localhost:8001/v1"
@@ -33,6 +43,9 @@ else:
     assert False
     # executor_llm = ChatOpenRouter(model_name="openrouter/nvidia/llama-3.1-nemotron-70b-instruct:free", temperature=0.4)
     # manager_llm = ChatOpenRouter(model_name="openrouter/nvidia/llama-3.1-nemotron-70b-instruct:free", temperature=0.4)
+
+
+config_file = f'/Users/chenxi/Desktop/Projects/SciTown/src/test_researcher/config/{args.task_name}.json'
 
 @CrewBase
 class TestResearcher():
@@ -121,15 +134,17 @@ class TestResearcher():
 
     @crew
     def crew(self) -> Custom_Crew:
-        """Creates the TestResearcher crew"""
+
         return Custom_Crew(
+            # config=json.load(open(self.config_file, 'r')),
+            task_execution_output_json_path=task_execution_output_json_path,
             agents=self.agents, 
             tasks=self.tasks, 
             manager_llm=manager_llm,
             # planning_llm=planning_llm,
             # planning=True,
             verbose=True,
-            output_log_file=args.output_log_file,
+            output_log_file=output_log_file,
             # _file_handler=FileHandler(self.output_log_file)
             process=Process.hierarchical, # In case you wanna use that instead https://docs.crewai.com/how-to/Hierarchical/
         )

@@ -1,0 +1,96 @@
+Traceback (most recent call last):
+  File "/Users/chenxi/Desktop/Projects/SciTown/src/source/custom_agent.py", line 133, in execute_task
+    result = self.agent_executor.invoke(
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/chenxi/Desktop/Projects/SciTown/src/source/custom_crew_agent_executor.py", line 133, in invoke
+    raise e
+  File "/Users/chenxi/Desktop/Projects/SciTown/src/source/custom_crew_agent_executor.py", line 120, in invoke
+    formatted_answer = self._invoke_loop()
+                       ^^^^^^^^^^^^^^^^^^^
+  File "/Users/chenxi/Desktop/Projects/SciTown/src/source/custom_crew_agent_executor.py", line 229, in _invoke_loop
+    raise e
+  File "/Users/chenxi/Desktop/Projects/SciTown/src/source/custom_crew_agent_executor.py", line 163, in _invoke_loop
+    answer = get_llm_response(
+             ^^^^^^^^^^^^^^^^^
+  File "/Users/chenxi/miniconda3/envs/multiagent/lib/python3.12/site-packages/crewai/utilities/agent_utils.py", line 163, in get_llm_response
+    raise ValueError("Invalid response from LLM call - None or empty.")
+ValueError: Invalid response from LLM call - None or empty.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/chenxi/Desktop/Projects/SciTown/src/source/custom_agent.py", line 133, in execute_task
+    result = self.agent_executor.invoke(
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/chenxi/Desktop/Projects/SciTown/src/source/custom_crew_agent_executor.py", line 133, in invoke
+    raise e
+  File "/Users/chenxi/Desktop/Projects/SciTown/src/source/custom_crew_agent_executor.py", line 120, in invoke
+    formatted_answer = self._invoke_loop()
+                       ^^^^^^^^^^^^^^^^^^^
+  File "/Users/chenxi/Desktop/Projects/SciTown/src/source/custom_crew_agent_executor.py", line 229, in _invoke_loop
+    raise e
+  File "/Users/chenxi/Desktop/Projects/SciTown/src/source/custom_crew_agent_executor.py", line 163, in _invoke_loop
+    answer = get_llm_response(
+             ^^^^^^^^^^^^^^^^^
+  File "/Users/chenxi/miniconda3/envs/multiagent/lib/python3.12/site-packages/crewai/utilities/agent_utils.py", line 163, in get_llm_response
+    raise ValueError("Invalid response from LLM call - None or empty.")
+ValueError: Invalid response from LLM call - None or empty.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/chenxi/Desktop/Projects/SciTown/src/test_researcher/main.py", line 27, in run
+    TestResearcher().crew().kickoff(inputs=inputs)
+  File "/Users/chenxi/miniconda3/envs/multiagent/lib/python3.12/site-packages/crewai/crew.py", line 648, in kickoff
+    result = self._run_hierarchical_process()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/chenxi/miniconda3/envs/multiagent/lib/python3.12/site-packages/crewai/crew.py", line 763, in _run_hierarchical_process
+    return self._execute_tasks(self.tasks)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/chenxi/Desktop/Projects/SciTown/src/source/custom_crew.py", line 171, in _execute_tasks
+    task_output = task.execute_sync(
+                  ^^^^^^^^^^^^^^^^^^
+  File "/Users/chenxi/miniconda3/envs/multiagent/lib/python3.12/site-packages/crewai/task.py", line 328, in execute_sync
+    return self._execute_core(agent, context, tools)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/chenxi/miniconda3/envs/multiagent/lib/python3.12/site-packages/crewai/task.py", line 472, in _execute_core
+    raise e  # Re-raise the exception after emitting the event
+    ^^^^^^^
+  File "/Users/chenxi/miniconda3/envs/multiagent/lib/python3.12/site-packages/crewai/task.py", line 392, in _execute_core
+    result = agent.execute_task(
+             ^^^^^^^^^^^^^^^^^^^
+  File "/Users/chenxi/Desktop/Projects/SciTown/src/source/custom_agent.py", line 165, in execute_task
+    result = self.execute_task(task, context, tools)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/chenxi/Desktop/Projects/SciTown/src/source/custom_agent.py", line 165, in execute_task
+    result = self.execute_task(task, context, tools)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/chenxi/Desktop/Projects/SciTown/src/source/custom_agent.py", line 164, in execute_task
+    raise e
+  File "/Users/chenxi/Desktop/Projects/SciTown/src/source/custom_agent.py", line 133, in execute_task
+    result = self.agent_executor.invoke(
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/chenxi/Desktop/Projects/SciTown/src/source/custom_crew_agent_executor.py", line 133, in invoke
+    raise e
+  File "/Users/chenxi/Desktop/Projects/SciTown/src/source/custom_crew_agent_executor.py", line 120, in invoke
+    formatted_answer = self._invoke_loop()
+                       ^^^^^^^^^^^^^^^^^^^
+  File "/Users/chenxi/Desktop/Projects/SciTown/src/source/custom_crew_agent_executor.py", line 229, in _invoke_loop
+    raise e
+  File "/Users/chenxi/Desktop/Projects/SciTown/src/source/custom_crew_agent_executor.py", line 163, in _invoke_loop
+    answer = get_llm_response(
+             ^^^^^^^^^^^^^^^^^
+  File "/Users/chenxi/miniconda3/envs/multiagent/lib/python3.12/site-packages/crewai/utilities/agent_utils.py", line 163, in get_llm_response
+    raise ValueError("Invalid response from LLM call - None or empty.")
+ValueError: Invalid response from LLM call - None or empty.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/Users/chenxi/Desktop/Projects/SciTown/src/test_researcher/main.py", line 70, in <module>
+    run()
+  File "/Users/chenxi/Desktop/Projects/SciTown/src/test_researcher/main.py", line 29, in run
+    raise Exception(f"An error occurred while running the crew: {e}")
+Exception: An error occurred while running the crew: Invalid response from LLM call - None or empty.
