@@ -10,11 +10,16 @@ from crewai.llm import LLM, BaseLLM
 from .filehandler import FileHandler
 from typing import Any, Callable, Dict, List, Optional, Set, Tuple, Union, cast
 from crewai.tasks.task_output import TaskOutput
-from crewai.task import Task
+# from crewai.task import Task
 from concurrent.futures import Future
 from crewai.tools.base_tool import BaseTool, Tool
 from crewai.tasks.conditional_task import ConditionalTask
 from crewai.crews.crew_output import CrewOutput
+from pydantic_core import PydanticCustomError
+from crewai.tools.agent_tools.agent_tools import AgentTools
+
+from .custom_task import Custom_Task
+from .custom_agent import Custom_Agent
 
 class Custom_Crew(Crew):
 
@@ -35,11 +40,47 @@ class Custom_Crew(Crew):
 
         return self
 
+    def _setup_from_config(self):
+        assert self.config is not None, "Config should not be None."
 
+        """Initializes agents and tasks from the provided config."""
+        if not self.config.get("agents") or not self.config.get("tasks"):
+            raise PydanticCustomError(
+                "missing_keys_in_config", "Config should have 'agents' and 'tasks'.", {}
+            )
+
+        self.process = self.config.get("process", self.process)
+        self.agents = [Custom_Agent(**agent) for agent in self.config["agents"]]
+        self.tasks = [self._create_task(task) for task in self.config["tasks"]]
+
+    def _create_manager_agent(self):
+        i18n = I18N(prompt_file=self.prompt_file)
+        if self.manager_agent is not None:
+            self.manager_agent.allow_delegation = True
+            manager = self.manager_agent
+            if manager.tools is not None and len(manager.tools) > 0:
+                self._logger.log(
+                    "warning", "Manager agent should not have tools", color="orange"
+                )
+                manager.tools = []
+                raise Exception("Manager agent should not have tools")
+        else:
+            self.manager_llm = create_llm(self.manager_llm)
+            manager = Custom_Agent(
+                role=i18n.retrieve("hierarchical_manager_agent", "role"),
+                goal=i18n.retrieve("hierarchical_manager_agent", "goal"),
+                backstory=i18n.retrieve("hierarchical_manager_agent", "backstory"),
+                tools=AgentTools(agents=self.agents).tools(),
+                allow_delegation=True,
+                llm=self.manager_llm,
+                verbose=self.verbose,
+            )
+            self.manager_agent = manager
+        manager.crew = self
 
     def _execute_tasks(
         self,
-        tasks: List[Task],
+        tasks: List[Custom_Task],
         start_index: Optional[int] = 0,
         was_replayed: bool = False,
     ) -> CrewOutput:
@@ -54,7 +95,7 @@ class Custom_Crew(Crew):
         """
 
         task_outputs: List[TaskOutput] = []
-        futures: List[Tuple[Task, Future[TaskOutput], int]] = []
+        futures: List[Tuple[Custom_Task, Future[TaskOutput], int]] = []
         last_sync_output: Optional[TaskOutput] = None
 
         for task_index, task in enumerate(tasks):

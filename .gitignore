@@ -1,7 +1,7 @@
 .vscode
-logs
 __pycache__
 .DS_Store
 .test
 secret.sh
 scret.json
+.trash

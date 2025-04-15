@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import sys
 import warnings
+from .init_args import args
 
 from datetime import datetime
 
@@ -19,7 +20,7 @@ def run():
     Run the crew.
     """
     inputs = {
-        "query": "深海探测方法研究"
+        "query": args.query
     }
     
     try:

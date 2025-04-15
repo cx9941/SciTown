@@ -1,9 +1,11 @@
-from crewai import Agent, Crew, Process, Task
+# from crewai import Agent, Crew, Process, Task
+from crewai import Process
 from crewai.project import CrewBase, agent, crew, task, before_kickoff, after_kickoff
 from myllm.routers import ChatOpenRouter
 from ipdb import set_trace
 from source.custom_crew import Custom_Crew
-from crewai import Crew  # 假设你使用的是 CrewAI 或类似结构
+from source.custom_agent import Custom_Agent
+from source.custom_task import Custom_Task
 from pydantic import (
     model_validator,
 )
@@ -15,102 +17,102 @@ from crewai.llm import LLM, BaseLLM
 import os
 from langchain_openai import ChatOpenAI
 import os
+from .init_args import args
 
-
-# os.environ["OPENAI_API_BASE"] = "http://localhost:8001/v1"
-# os.environ["OPENAI_API_KEY"] = "NA"
-
-# manager_llm = ChatOpenAI(model="openai/qwen72b")
-# executor_llm = ChatOpenAI(model="openai/qwen72b")
-
-os.environ["OPENAI_API_BASE"] = "https://uni-api.cstcloud.cn/v1"
-
-manager_llm = ChatOpenAI(model="openai/deepseek-v3:671b")
-executor_llm = ChatOpenAI(model="openai/deepseek-v3:671b")
-
-# executor_llm = ChatOpenRouter(model_name="openrouter/nvidia/llama-3.1-nemotron-70b-instruct:free", temperature=0.4)
-# manager_llm = ChatOpenRouter(model_name="openrouter/nvidia/llama-3.1-nemotron-70b-instruct:free", temperature=0.4)
+if args.model_name == 'qwen':
+    os.environ["OPENAI_API_BASE"] = "http://localhost:8001/v1"
+    os.environ["OPENAI_API_KEY"] = "NA"
+    manager_llm = ChatOpenAI(model="openai/qwen72b")
+    executor_llm = ChatOpenAI(model="openai/qwen72b")
+elif args.model_name == 'deepseek-v3':
+    os.environ["OPENAI_API_BASE"] = "https://uni-api.cstcloud.cn/v1"
+    manager_llm = ChatOpenAI(model="openai/deepseek-v3:671b")
+    executor_llm = ChatOpenAI(model="openai/deepseek-v3:671b")
+else:
+    assert False
+    # executor_llm = ChatOpenRouter(model_name="openrouter/nvidia/llama-3.1-nemotron-70b-instruct:free", temperature=0.4)
+    # manager_llm = ChatOpenRouter(model_name="openrouter/nvidia/llama-3.1-nemotron-70b-instruct:free", temperature=0.4)
 
 @CrewBase
 class TestResearcher():
-    agents_config = 'config/crossdisc/agents.yaml'
-    tasks_config = 'config/crossdisc/tasks.yaml'
+    agents_config = f'config/{args.task_name}/agents.yaml'
+    tasks_config = f'config/{args.task_name}/tasks.yaml'
 
     @agent
-    def Biology_export(self) -> Agent:
-        return Agent(
+    def Biology_export(self) -> Custom_Agent:
+        return Custom_Agent(
             config=self.agents_config['Biology_export'],
             llm=executor_llm,
             verbose=True
         )
     
     @agent
-    def Physics_export(self) -> Agent:
-        return Agent(
+    def Physics_export(self) -> Custom_Agent:
+        return Custom_Agent(
             config=self.agents_config['Physics_export'],
             llm=executor_llm,
             verbose=True
         )
     
     @agent
-    def Mathematics_export(self) -> Agent:
-        return Agent(
+    def Mathematics_export(self) -> Custom_Agent:
+        return Custom_Agent(
             config=self.agents_config['Mathematics_export'],
             llm=executor_llm,
             verbose=True
         )
     
     @agent
-    def Chemistry_export(self) -> Agent:
-        return Agent(
+    def Chemistry_export(self) -> Custom_Agent:
+        return Custom_Agent(
             config=self.agents_config['Chemistry_export'],
             llm=executor_llm,
             verbose=True
         )
     
     @agent
-    def Geography_export(self) -> Agent:
-        return Agent(
+    def Geography_export(self) -> Custom_Agent:
+        return Custom_Agent(
             config=self.agents_config['Geography_export'],
             llm=executor_llm,
             verbose=True
         )
     
     @agent
-    def AI_export(self) -> Agent:
-        return Agent(
+    def AI_export(self) -> Custom_Agent:
+        return Custom_Agent(
             config=self.agents_config['AI_export'],
             llm=executor_llm,
             verbose=True
         )
     
     @task
-    def Decompose_Problem_Into_Subtasks(self) -> Task:
-        return Task(
+    def Decompose_Problem_Into_Subtasks(self) -> Custom_Task:
+        return Custom_Task(
             config=self.tasks_config['Decompose_Problem_Into_Subtasks'],
             llm=manager_llm,
             verbose=True
         )
     
     @task
-    def Subtask_MultiDomain_Expert_Analysis(self) -> Task:
-        return Task(
+    def Subtask_MultiDomain_Expert_Analysis(self) -> Custom_Task:
+        return Custom_Task(
             config=self.tasks_config['Subtask_MultiDomain_Expert_Analysis'],
             llm=executor_llm,
             verbose=True
         )
     
     @task
-    def CrossDomain_Support_Expansion(self) -> Task:
-        return Task(
+    def CrossDomain_Support_Expansion(self) -> Custom_Task:
+        return Custom_Task(
             config=self.tasks_config['CrossDomain_Support_Expansion'],
             llm=executor_llm,
             verbose=True
         )
     
     @task
-    def Final_Solution_Proposal(self) -> Task:
-        return Task(
+    def Final_Solution_Proposal(self) -> Custom_Task:
+        return Custom_Task(
             config=self.tasks_config['Final_Solution_Proposal'],
             llm=executor_llm,
             verbose=True
@@ -126,7 +128,7 @@ class TestResearcher():
             # planning_llm=planning_llm,
             # planning=True,
             verbose=True,
-            output_log_file="../outputs/crossdisc/log-deep.json",
+            output_log_file=args.output_log_file,
             # _file_handler=FileHandler(self.output_log_file)
             process=Process.hierarchical, # In case you wanna use that instead https://docs.crewai.com/how-to/Hierarchical/
         )
