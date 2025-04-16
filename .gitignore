@@ -5,3 +5,6 @@ __pycache__
 secret.sh
 scret.json
 .trash
+formated_outputs
+logs
+outputs
