@@ -14,3 +14,9 @@ source $HOME/.cargo/env
 cd src
 
 python -m test_researcher.main
+
+批量运行命令
+
+sh scripts/run_qwen.sh
+
+sh scripts/run_deepseek.sh
