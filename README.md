@@ -20,3 +20,8 @@ python -m test_researcher.main
 sh scripts/run_qwen.sh
 
 sh scripts/run_deepseek.sh
+
+### 查看进度命令
+ps aux | grep test_researcher.main
+
+可以针对pid进行kill
