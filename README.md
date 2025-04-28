@@ -13,7 +13,7 @@ source $HOME/.cargo/env
 ### 运行命令
 cd src
 
-python -m test_researcher.main
+python -m test_researcher.main --model_name deepseek-v3
 
 批量运行命令
 

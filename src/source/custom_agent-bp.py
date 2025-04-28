@@ -6,7 +6,7 @@ from pydantic import Field, InstanceOf, PrivateAttr, model_validator
 
 from crewai.agents import CacheHandler
 from crewai.agents.agent_builder.base_agent import BaseAgent
-from .custom_crew_agent_executor import Custom_CrewAgentExecutor#####.custom
+from .custom_crew_agent_executor import Custom_CrewAgentExecutor
 from crewai.knowledge.knowledge import Knowledge
 from crewai.knowledge.source.base_knowledge_source import BaseKnowledgeSource
 from crewai.knowledge.utils.knowledge_utils import extract_knowledge_context
@@ -37,20 +37,7 @@ from crewai.utilities.training_handler import CrewTrainingHandler
 
 from crewai import Agent
 
-
-from crewai.tools.agent_tools.base_agent_tools import BaseAgentTool
-from .custom_tool import WebSearchTool  # 导入新版工具########################
-
-
-
 class Custom_Agent(Agent):
-
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        # 添加工具时无需额外参数（兼容BaseAgentTool）
-        self.tools.append(WebSearchTool()) 
-
-
     def execute_task(
         self,
         task: Task,

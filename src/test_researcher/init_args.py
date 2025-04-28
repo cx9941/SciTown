@@ -2,7 +2,7 @@ import argparse
 import os
 
 parser = argparse.ArgumentParser()
-parser.add_argument("--model_name", default='qwen', type=str)
+parser.add_argument("--model_name", default='qwen7b', type=str)
 parser.add_argument("--task_name", default='crossdisc', type=str)
 parser.add_argument("--query", default='深海探测研究', type=str)
 args = parser.parse_args()

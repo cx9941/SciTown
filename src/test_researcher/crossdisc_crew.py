@@ -6,6 +6,8 @@ from ipdb import set_trace
 from source.custom_crew import Custom_Crew
 from source.custom_agent import Custom_Agent
 from source.custom_task import Custom_Task
+
+
 from pydantic import (
     model_validator,
 )
@@ -31,10 +33,15 @@ os.makedirs(f"{args.execution_logs_dir}/{args.query}", exist_ok=True)
 
 
 if args.model_name == 'qwen':
-    os.environ["OPENAI_API_BASE"] = "http://localhost:8001/v1"
+    os.environ["OPENAI_API_BASE"] = "http://10.0.82.212:8866/v1"
     os.environ["OPENAI_API_KEY"] = "NA"
     manager_llm = ChatOpenAI(model="openai/qwen72b")
     executor_llm = ChatOpenAI(model="openai/qwen72b")
+elif args.model_name == 'qwen7b':
+    os.environ["OPENAI_API_BASE"] = "http://10.0.82.212:8866/v1"
+    os.environ["OPENAI_API_KEY"] = "NA"
+    manager_llm = ChatOpenAI(model="openai/qwen7b")
+    executor_llm = ChatOpenAI(model="openai/qwen7b")
 elif args.model_name == 'deepseek-v3':
     os.environ["OPENAI_API_BASE"] = "https://uni-api.cstcloud.cn/v1"
     manager_llm = ChatOpenAI(model="openai/deepseek-v3:671b")
